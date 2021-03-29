@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.awt.image.BufferedImage; 
 import javax.imageio.ImageIO; 
 import java.awt.Color;
@@ -17,33 +18,40 @@ public class Asciiart {
     HashMap<Integer, Character> asciiMap;
 
     public static void main(String[] args) {
-        new Asciiart();
+        new Asciiart(args);
     }
 
-    /********* main *********/
-    public Asciiart() {
-        initializeImage();
+    /* Treat like main */
+    public Asciiart(String[] args) {
+        initializeImage(args);
         loadImageData();
         initializeAsciiMap();
         printAsciiArt();
     }
 
-    public void initializeImage() {
-        try {
-            file = new File("test.jpeg");
-            //use ImageIO to initialize the image
-            img = ImageIO.read(file);
-        } catch(Exception e) {
-            System.out.print("There was an error loading the image.");
+    public void initializeImage(String[] args) {
+        if (args.length != 1) {
+            System.out.println("\tUsage: java Asciiart <image file path>");
+            System.exit(0);
         }
 
-        //get and print image width and height
+        try {
+            file = new File(args[0]);
+            //use ImageIO to initialize the image
+            img = ImageIO.read(file);
+        } catch(FileNotFoundException e) {
+            System.out.println("Error. File not found.\n");
+        } catch(Exception ex) {
+            System.out.print("Error. Could not load image.\n");
+        }
+
+        // Get and print image width and height
         width = img.getWidth();
         height = img.getHeight();
     }
 
     public void loadImageData() {
-        //color values stored in this matrix as color objects
+        // Color values stored in this matrix as color objects
         colorData = new Color[width][height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -51,7 +59,7 @@ public class Asciiart {
             }
         } 
 
-        //now create a brightness matrix
+        // Create a brightness matrix
         brightness = new int[width][height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -64,12 +72,13 @@ public class Asciiart {
     }
 
     public void initializeAsciiMap() {
-        //make a hashmap of ascii characters to brightness values
+        // Map brightness values to ascii characters
         final char[] asciis = "`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$".toCharArray();
+        final int MAX_BRIGHTNESS = 255;
         asciiMap = new HashMap<>();
-        
-        for (int i = 0; i < 255; i++) {
-            asciiMap.put(i, asciis[i / 4]);
+     
+        for (int i = 0; i < MAX_BRIGHTNESS; i++) {
+            asciiMap.put(i, asciis[i/4]);
         }
     }
 
