@@ -5,8 +5,6 @@ import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.util.HashMap;
 
-/* @author Dom Campese */
-
 public class Asciiart {
 
     BufferedImage img;
