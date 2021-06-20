@@ -43,7 +43,6 @@ public class Asciiart {
             System.out.print("Error. Could not load image.\n");
         }
 
-        // Get and print image width and height
         width = img.getWidth();
         height = img.getHeight();
     }
